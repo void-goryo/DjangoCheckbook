@@ -39,6 +39,7 @@ def transaction(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            pk = request.POST['acount']
             return balance(request, pk)
     content = {'form':form}
     return render(request, 'checkbook/AddTransaction.html', content)
