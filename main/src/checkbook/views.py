@@ -12,3 +12,13 @@ def balance(request):
 
 def transaction(request):
     return render(request, 'checkbook/AddTransaction.html')
+
+def create_account(request):
+    form = AccountForm(data=request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+        content = {'form':form}
+        return render(request, 'checkbook/CreateNewAccount.html', content)
+
