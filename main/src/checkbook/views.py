@@ -1,17 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
+from .models import Account, Transaction
 from .forms import AccountForm, TransactionForm
 
 def home(request):
     return render(request, 'checkbook/index.html')
 
-def create_account(request):
-    return render(request, 'checkbook/CreateNewAccount.html')
-
 def balance(request):
-    return render(request, 'checkbook/BalanceSheet.html')
-
-def transaction(request):
-    return render(request, 'checkbook/AddTransaction.html')
+    account = get_object_or_404(Account, pk=pk)
+    content = {'account':account}
+    return render(request, 'checkbook/BalanceSheet.html', content)
 
 def create_account(request):
     form = AccountForm(data=request.POST or None)
@@ -19,14 +16,14 @@ def create_account(request):
         if form.is_valid():
             form.save()
             return redirect('index')
-        content = {'form':form}
-        return render(request, 'checkbook/CreateNewAccount.html', content)
+    content = {'form':form}
+    return render(request, 'checkbook/CreateNewAccount.html', content)
 
 def transaction(request):
-    form = AccountForm(data=request.POST or None)
+    form = TransactionForm(data=request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
             form.save()
             return redirect('index')
-        content = {'form':form}
-        return render(request, 'checkbook/CreateNewAccount.html', content)
+    content = {'form':form}
+    return render(request, 'checkbook/AddTransaction.html', content)
