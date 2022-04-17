@@ -3,7 +3,12 @@ from .models import Account, Transaction
 from .forms import AccountForm, TransactionForm
 
 def home(request):
-    return render(request, 'checkbook/index.html')
+    form = TransactionForm(data=request.POST or None)
+    if request.method == 'POST':
+        pk = request.POST['account']
+        return balance(request, pk)
+    content = {"form":form}
+    return render(request, 'checkbook/index.html', content)
 
 def balance(request):
     account = get_object_or_404(Account, pk=pk)
