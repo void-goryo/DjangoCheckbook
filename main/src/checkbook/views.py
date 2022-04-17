@@ -22,3 +22,11 @@ def create_account(request):
         content = {'form':form}
         return render(request, 'checkbook/CreateNewAccount.html', content)
 
+def transaction(request):
+    form = AccountForm(data=request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+        content = {'form':form}
+        return render(request, 'checkbook/CreateNewAccount.html', content)
