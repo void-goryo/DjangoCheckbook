@@ -22,7 +22,7 @@ def balance(request, pk):
         else:
             current_total -= t.amount
             table_contents.update({t:current_total})
-    content = {'account':account}
+    content = {'account':account, 'table_contents':table_contents, 'balance':current_total}
     return render(request, 'checkbook/BalanceSheet.html', content)
 
 def create_account(request):
@@ -39,7 +39,8 @@ def transaction(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            pk = request.POST['acount']
+            pk = request.POST['account']
+            form.save()
             return balance(request, pk)
     content = {'form':form}
     return render(request, 'checkbook/AddTransaction.html', content)
